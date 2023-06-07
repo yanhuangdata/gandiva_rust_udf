@@ -13,5 +13,6 @@ members = [
     "num_func",
     "rad_func",
     "is_ascii_func",
+    "format_func",
 ]
 
