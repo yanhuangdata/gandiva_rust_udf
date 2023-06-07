@@ -11,5 +11,6 @@ members = [
     "valid_json_func",
     "to_hex_func",
     "num_func",
+    "rad_func",
 ]
 
