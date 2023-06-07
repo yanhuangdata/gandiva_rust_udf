@@ -13,6 +13,12 @@ pub fn conv(num: &str, from_radix: i64, to_radix: i64) -> String {
     }
 }
 
+// convert decimal into binary representation
+#[udf(needs_context = true)]
+pub fn bin(num: i64) -> String {
+    radix(num, 2).to_string()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -27,5 +33,11 @@ mod tests {
     fn test_conv_binary_to_hex() {
         let result = conv("1110", 2, 16);
         assert_eq!(result, "e");
+    }
+
+    #[test]
+    fn test_conv_hex_to_binary() {
+        let result = bin(7);
+        assert_eq!(result, "111");
     }
 }
