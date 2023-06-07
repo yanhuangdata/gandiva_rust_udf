@@ -1,0 +1,11 @@
+[package]
+name = "valid_json_func"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+serde_json = "1.0.95"
+libc = "0.2.141"
+gandiva_rust_udf_macro = { path = "../../gandiva_rust_udf_macro" }

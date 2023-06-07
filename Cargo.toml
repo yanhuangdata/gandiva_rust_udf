@@ -1,0 +1,15 @@
+[package]
+name = "gandiva_rust_udf"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[workspace]
+members = [
+    "pi_func",
+    "valid_json_func",
+    "to_hex_func",
+    "num_func",
+]
+
