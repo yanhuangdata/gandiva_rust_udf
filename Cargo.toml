@@ -17,5 +17,6 @@ members = [
     "conv_func",
     "ip_func",
     "uuid_func",
+    "url_func",
 ]
 
