@@ -15,5 +15,7 @@ members = [
     "is_ascii_func",
     "format_func",
     "conv_func",
+    "ip_func",
+    "uuid_func",
 ]
 
