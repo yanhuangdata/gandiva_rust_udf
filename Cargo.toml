@@ -18,5 +18,6 @@ members = [
     "ip_func",
     "uuid_func",
     "url_func",
+    "openai_func",
 ]
 
