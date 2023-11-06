@@ -1,13 +1,15 @@
 use gandiva_rust_udf_macro::udf;
 
 #[udf]
-pub fn degree_to_rad(degree: f64) -> f64 {
+fn degree_to_rad(degree: f64) -> f64 {
     degree * std::f64::consts::PI / 180.0
 }
 
 #[udf]
-pub fn rad_to_degree(rad: f64) -> f64 {
-    rad * 180.0 / std::f64::consts::PI
+fn rad_to_degree(rad: f64) -> f64 {
+    let degree = rad * 180.0 / std::f64::consts::PI;
+    eprintln!("rad_to_degree({}) = {}", rad, degree);
+    degree
 }
 
 #[cfg(test)]

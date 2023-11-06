@@ -7,22 +7,23 @@ use openai_api_rs::v1::chat_completion::{self, ChatCompletionRequest};
 context_fns!();
 
 #[udf(needs_context = true)]
-pub fn askai(prompt: &str) -> String {
+fn askai(prompt: &str) -> String {
     let result = _call_openai(&prompt, "");
     result
 }
 
 #[udf(needs_context = true)]
-pub fn ai_extract(data: &str) -> String {
+fn ai_extract(data: &str) -> String {
     let result = _call_openai(data,
                               "Extract the entities from the given data as key value pairs. \
                               You are an assistant that only speaks JSON. \
+                              Use lower case for JSON key names.\
                               Do not write normal text.");
     result
 }
 
 #[udf(needs_context = true)]
-pub fn ai_func(user_content: &str, system_content: &str) -> String {
+fn ai_func(user_content: &str, system_content: &str) -> String {
     _call_openai(user_content, system_content)
 }
 
@@ -36,28 +37,43 @@ fn _call_openai(user_content: &str, system_content: &str) -> String {
         messages.push(chat_completion::ChatCompletionMessage {
             role: chat_completion::MessageRole::system,
             content: String::from(system_content),
+            name: None,
+            function_call: None,
         });
     }
     messages.push(chat_completion::ChatCompletionMessage {
         role: chat_completion::MessageRole::user,
         content: String::from(user_content),
+        name: None,
+        function_call: None,
     });
 
     let req = ChatCompletionRequest {
         model: chat_completion::GPT3_5_TURBO.to_string(),
         messages,
+        functions: None,
+        function_call: None,
+        temperature: None,
+        top_p: None,
+        n: None,
+        stream: None,
+        stop: None,
+        max_tokens: None,
+        presence_penalty: None,
+        frequency_penalty: None,
+        logit_bias: None,
+        user: None,
     };
-    let resp = _send_request(&client, req);
-    let rt = tokio::runtime::Runtime::new().unwrap();
-    match rt.block_on(resp) {
-        Ok(r) => r,
-        Err(e) => e.to_string(),
+    let result = client.chat_completion(req);
+    match result {
+        Ok(result) => {
+            let message = result.choices[0].message.content.clone();
+            message.unwrap()
+        }
+        Err(e) => {
+            format!("err: {}", e)
+        }
     }
-}
-
-async fn _send_request(client: &Client, req: ChatCompletionRequest) -> Result<String, Box<dyn std::error::Error>> {
-    let result = client.chat_completion(req).await?;
-    Ok(result.choices[0].message.content.clone())
 }
 
 #[cfg(test)]

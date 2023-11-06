@@ -1,7 +1,7 @@
 use gandiva_rust_udf_macro::udf;
 
 #[udf]
-pub fn pi() -> f64 {
+fn pi() -> f64 {
     std::f64::consts::PI
 }
 

@@ -5,27 +5,27 @@ use std::net::{Ipv4Addr, Ipv6Addr};
 context_fns!();
 
 #[udf]
-pub fn is_ipv4(addr: &str) -> bool {
+fn is_ipv4(addr: &str) -> bool {
     addr.parse::<Ipv4Addr>().is_ok()
 }
 
 #[udf]
-pub fn is_ipv6(addr: &str) -> bool {
+fn is_ipv6(addr: &str) -> bool {
     addr.parse::<Ipv6Addr>().is_ok()
 }
 
 #[udf]
-pub fn is_ipv4_loopback(addr: &str) -> bool {
+fn is_ipv4_loopback(addr: &str) -> bool {
     addr.parse::<Ipv4Addr>().map_or(false, |ip| ip.is_loopback())
 }
 
 #[udf]
-pub fn is_ipv6_loopback(addr: &str) -> bool {
+fn is_ipv6_loopback(addr: &str) -> bool {
     addr.parse::<Ipv6Addr>().map_or(false, |ip| ip.is_loopback())
 }
 
 #[udf]
-pub fn ipv4_string_to_num(addr: &str) -> u32 {
+fn ipv4_string_to_num(addr: &str) -> u32 {
     let ip = addr.parse::<Ipv4Addr>().unwrap();
     let octets = ip.octets();
     let mut num = 0;
@@ -36,7 +36,7 @@ pub fn ipv4_string_to_num(addr: &str) -> u32 {
 }
 
 #[udf(needs_context = true)]
-pub fn ipv4_num_to_string(addr: u32) -> String {
+fn ipv4_num_to_string(addr: u32) -> String {
     let mut octets = [0u8; 4];
     for i in 0..4 {
         octets[i] = ((addr >> (8 * (3 - i))) & 0xff) as u8;
@@ -45,7 +45,7 @@ pub fn ipv4_num_to_string(addr: u32) -> String {
 }
 
 #[udf(needs_context = true)]
-pub fn ipv4_to_ipv6(ipv4: &str) -> String {
+fn ipv4_to_ipv6(ipv4: &str) -> String {
     let ipv4_addr = ipv4.parse::<Ipv4Addr>().ok().unwrap();
     let ipv6_components = ipv4_addr.octets();
     let ipv6_addr = Ipv6Addr::new(0, 0, 0, 0, 0, 0xffff,

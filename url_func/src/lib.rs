@@ -4,7 +4,7 @@ use gandiva_rust_udf_macro::context_fns;
 context_fns!();
 
 #[udf(needs_context = true)]
-pub fn protocol(url: &str) -> String {
+fn protocol(url: &str) -> String {
     let url = url::Url::parse(url);
     match url {
         Ok(u) => u.scheme().to_string(),
@@ -13,7 +13,7 @@ pub fn protocol(url: &str) -> String {
 }
 
 #[udf(needs_context = true)]
-pub fn domain(url: &str) -> String {
+fn domain(url: &str) -> String {
     let url = url::Url::parse(url);
     match url {
         Ok(u) => u.domain().unwrap().to_string(),
@@ -22,7 +22,7 @@ pub fn domain(url: &str) -> String {
 }
 
 #[udf(needs_context = true)]
-pub fn domain_without_www(url: &str) -> String {
+fn domain_without_www(url: &str) -> String {
     let url = url::Url::parse(url);
     match url {
         Ok(u) => u.domain().unwrap().trim_start_matches("www.").to_string(),
@@ -31,7 +31,7 @@ pub fn domain_without_www(url: &str) -> String {
 }
 
 #[udf(needs_context = true)]
-pub fn top_level_domain(url: &str) -> String {
+fn top_level_domain(url: &str) -> String {
     let url = url::Url::parse(url);
     match url {
         Ok(u) => u.domain().unwrap().split('.').last().unwrap().to_string(),
@@ -41,7 +41,7 @@ pub fn top_level_domain(url: &str) -> String {
 
 
 #[udf(needs_context = true)]
-pub fn port(url: &str) -> i32 {
+fn port(url: &str) -> i32 {
     let url = url::Url::parse(url);
     match url {
         Ok(u) => match u.port() {
@@ -55,7 +55,7 @@ pub fn port(url: &str) -> i32 {
 
 // path without query string
 #[udf(needs_context = true)]
-pub fn path(url: &str) -> String {
+fn path(url: &str) -> String {
     let url = url::Url::parse(url);
     match url {
         Ok(u) => u.path().to_string(),
@@ -65,7 +65,7 @@ pub fn path(url: &str) -> String {
 
 // path withquery string
 #[udf(needs_context = true)]
-pub fn path_full(url: &str) -> String {
+fn path_full(url: &str) -> String {
     let url = url::Url::parse(url);
     match url {
         Ok(u) => u.path().to_string() + "?" + u.query().unwrap_or(""),
@@ -75,7 +75,7 @@ pub fn path_full(url: &str) -> String {
 
 
 #[udf(needs_context = true)]
-pub fn query_string(url: &str) -> String {
+fn query_string(url: &str) -> String {
     let url = url::Url::parse(url);
     match url {
         Ok(u) => u.query().unwrap_or("").to_string(),
@@ -84,7 +84,7 @@ pub fn query_string(url: &str) -> String {
 }
 
 #[udf(needs_context = true)]
-pub fn fragment(url: &str) -> String {
+fn fragment(url: &str) -> String {
     let url = url::Url::parse(url);
     match url {
         Ok(u) => u.fragment().unwrap_or("").to_string(),
@@ -93,7 +93,7 @@ pub fn fragment(url: &str) -> String {
 }
 
 #[udf(needs_context = true)]
-pub fn netloc_username(url: &str) -> String {
+fn netloc_username(url: &str) -> String {
     let url = url::Url::parse(url);
     match url {
         Ok(u) => u.username().to_string(),
@@ -102,7 +102,7 @@ pub fn netloc_username(url: &str) -> String {
 }
 
 #[udf(needs_context = true)]
-pub fn netloc_password(url: &str) -> String {
+fn netloc_password(url: &str) -> String {
     let url = url::Url::parse(url);
     match url {
         Ok(u) => u.password().unwrap_or("").to_string(),
@@ -112,7 +112,7 @@ pub fn netloc_password(url: &str) -> String {
 
 // Extracts network locality (username:password@host:port) from a URL.
 #[udf(needs_context = true)]
-pub fn netloc(url: &str) -> String {
+fn netloc(url: &str) -> String {
     let url = url::Url::parse(url);
     match url {
         Ok(u) => {
@@ -137,7 +137,7 @@ pub fn netloc(url: &str) -> String {
 }
 
 #[udf(needs_context = true)]
-pub fn is_valid_url(url: &str) -> bool {
+fn is_valid_url(url: &str) -> bool {
     let url = url::Url::parse(url);
     match url {
         Ok(_) => true,
@@ -148,7 +148,7 @@ pub fn is_valid_url(url: &str) -> bool {
 // Removes no more than one 'www.' from the beginning of the URL's domain, if present.
 // https://www.example.com:8080/foo/bar?baz=qux#quux ==> https://example.com:8080/foo/bar?baz=qux#quux
 #[udf(needs_context = true)]
-pub fn cut_www(url: &str) -> String {
+fn cut_www(url: &str) -> String {
     let url = url::Url::parse(url);
     match url {
         Ok(u) => {
@@ -165,7 +165,7 @@ pub fn cut_www(url: &str) -> String {
 }
 
 #[udf(needs_context = true)]
-pub fn cut_query_string(url: &str) -> String {
+fn cut_query_string(url: &str) -> String {
     let url = url::Url::parse(url);
     match url {
         Ok(u) => {
@@ -178,7 +178,7 @@ pub fn cut_query_string(url: &str) -> String {
 }
 
 #[udf(needs_context = true)]
-pub fn cut_query_string_and_fragment(url: &str) -> String {
+fn cut_query_string_and_fragment(url: &str) -> String {
     let url = url::Url::parse(url);
     match url {
         Ok(u) => {

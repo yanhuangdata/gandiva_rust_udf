@@ -2,7 +2,7 @@ use serde_json::Value;
 use gandiva_rust_udf_macro::udf;
 
 #[udf]
-pub fn valid_json(json_str: &str) -> bool {
+fn valid_json(json_str: &str) -> bool {
     match serde_json::from_str::<Value>(json_str) {
         Ok(_) => true,
         Err(_) => false,

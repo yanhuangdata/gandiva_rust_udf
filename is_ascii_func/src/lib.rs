@@ -1,7 +1,7 @@
 use gandiva_rust_udf_macro::udf;
 
 #[udf]
-pub fn is_ascii(data: &str) -> bool {
+fn is_ascii(data: &str) -> bool {
     data.is_ascii()
 }
 

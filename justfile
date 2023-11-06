@@ -12,8 +12,10 @@ build build_type="":
 test:
     cargo test --workspace
 
+# the num-integer creates a build directory, which is not necessary
 bitcode:
-    find . -name "*.ll" | xargs -I {} llvm-as {}
+    rm -fr ./target/x86_64-apple-darwin/debug/build && find . -name "*.ll" | xargs -I {} sh -c 'opt --globaldce {} -o {}.bc'
+#    rm -fr ./target/x86_64-apple-darwin/debug/build && find . -name "*.ll" | xargs -I {} llvm-as {}
 
 clean:
     rm -fr target
