@@ -1,11 +1,8 @@
 use strfmt::strfmt;
 use std::collections::HashMap;
 use gandiva_rust_udf_macro::udf;
-use gandiva_rust_udf_macro::context_fns;
 
-context_fns!();
-
-#[udf(needs_context = true)]
+#[udf]
 pub fn format(template: &str, value1: &str) -> String {
     let mut vars: HashMap<String, &str> = HashMap::default();
     vars.insert("1".to_string(), value1);

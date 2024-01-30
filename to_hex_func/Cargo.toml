@@ -4,9 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-[lib]
-crate-type = ["cdylib"]
-
 [dependencies]
-libc = "0.2.141"
-gandiva_rust_udf_macro = { path = "../../gandiva_rust_udf_macro" }
+libc = "0.2.152"
+gandiva_rust_udf_macro = { path = "../../gandiva_rust_udf_macros/gandiva_rust_udf_macro" }
+gandiva_rust_udf_shared = { path = "../../gandiva_rust_udf_macros/gandiva_rust_udf_shared" }

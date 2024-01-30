@@ -7,6 +7,7 @@ edition = "2021"
 
 [workspace]
 members = [
+    "udf_core",
     "pi_func",
     "valid_json_func",
     "to_hex_func",
@@ -20,4 +21,3 @@ members = [
     "url_func",
     "openai_func",
 ]
-

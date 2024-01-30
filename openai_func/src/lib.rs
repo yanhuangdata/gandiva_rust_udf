@@ -1,18 +1,16 @@
 use gandiva_rust_udf_macro::udf;
-use gandiva_rust_udf_macro::context_fns;
+
 use openai_api_rs::v1::api::Client;
 use std::env;
 use openai_api_rs::v1::chat_completion::{self, ChatCompletionRequest};
 
-context_fns!();
-
-#[udf(needs_context = true)]
+#[udf]
 fn askai(prompt: &str) -> String {
     let result = _call_openai(&prompt, "");
     result
 }
 
-#[udf(needs_context = true)]
+#[udf]
 fn ai_extract(data: &str) -> String {
     let result = _call_openai(data,
                               "Extract the entities from the given data as key value pairs. \
@@ -22,7 +20,7 @@ fn ai_extract(data: &str) -> String {
     result
 }
 
-#[udf(needs_context = true)]
+#[udf]
 fn ai_func(user_content: &str, system_content: &str) -> String {
     _call_openai(user_content, system_content)
 }

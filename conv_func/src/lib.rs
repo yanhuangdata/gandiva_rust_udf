@@ -1,10 +1,7 @@
 use radix_fmt::radix;
 use gandiva_rust_udf_macro::udf;
-use gandiva_rust_udf_macro::context_fns;
 
-context_fns!();
-
-#[udf(needs_context = true)]
+#[udf]
 pub fn conv(num: &str, from_radix: i64, to_radix: i64) -> String {
     let value = i64::from_str_radix(num, from_radix as u32);
     match value {

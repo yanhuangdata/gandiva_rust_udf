@@ -1,8 +1,6 @@
 use gandiva_rust_udf_macro::udf;
-use gandiva_rust_udf_macro::context_fns;
-use std::net::{Ipv4Addr, Ipv6Addr};
 
-context_fns!();
+use std::net::{Ipv4Addr, Ipv6Addr};
 
 #[udf]
 fn is_ipv4(addr: &str) -> bool {
@@ -35,7 +33,7 @@ fn ipv4_string_to_num(addr: &str) -> u32 {
     num
 }
 
-#[udf(needs_context = true)]
+#[udf]
 fn ipv4_num_to_string(addr: u32) -> String {
     let mut octets = [0u8; 4];
     for i in 0..4 {
@@ -44,7 +42,7 @@ fn ipv4_num_to_string(addr: u32) -> String {
     Ipv4Addr::from(octets).to_string()
 }
 
-#[udf(needs_context = true)]
+#[udf]
 fn ipv4_to_ipv6(ipv4: &str) -> String {
     let ipv4_addr = ipv4.parse::<Ipv4Addr>().ok().unwrap();
     let ipv6_components = ipv4_addr.octets();
