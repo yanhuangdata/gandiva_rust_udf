@@ -1,7 +1,8 @@
 pub use pi_func::pi;
-use gandiva_rust_udf_shared::{get_udf_registry, free_udf_registry};
+use gandiva_rust_udf_macro::udf_registry;
 
 // FIXME: use build.rs to automate the registration of all functions
+#[udf_registry]
 pub fn register_all_funcs() {
     pi_func::register_pi_();
     valid_json_func::register_valid_json_utf8();
@@ -23,19 +24,6 @@ pub fn register_all_funcs() {
     openai_func::register_askai_utf8();
 }
 
-#[no_mangle]
-pub extern "C" fn load_registered_udfs() -> *mut libc::c_char {
-    register_all_funcs();
-    let registry_c_str = get_udf_registry();
-    registry_c_str
-}
-
-#[no_mangle]
-pub extern "C" fn finish_loading_registered_udfs(registry: *mut libc::c_char) {
-    free_udf_registry(registry);
-}
-
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -49,7 +37,7 @@ mod tests {
     #[test]
     fn test_register_func() {
         register_all_funcs();
-        let registry_c_str = get_udf_registry();
+        let registry_c_str = gandiva_rust_udf_shared::get_udf_registry();
         unsafe {
             let registry = std::ffi::CString::from_raw(registry_c_str);
             let registry_str = registry.to_str().unwrap();
