@@ -7,5 +7,5 @@ edition = "2021"
 
 [dependencies]
 lazy_static = { version = "1.4.0", features = [] }
-gandiva_rust_udf_macro = { path = "../../gandiva_rust_udf_macros/gandiva_rust_udf_macro" }
-gandiva_rust_udf_shared = { path = "../../gandiva_rust_udf_macros/gandiva_rust_udf_shared" }
+gandiva_rust_udf_macro = { version = "0.1.0" }
+gandiva_rust_udf_shared = { version = "0.1.0" }

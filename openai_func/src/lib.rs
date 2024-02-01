@@ -47,8 +47,10 @@ fn _call_openai(user_content: &str, system_content: &str) -> String {
     });
 
     let req = ChatCompletionRequest {
-        model: chat_completion::GPT3_5_TURBO.to_string(),
+        model: openai_api_rs::v1::common::GPT3_5_TURBO.to_string() ,
         messages,
+        tools: None,
+        tool_choice: None,
         functions: None,
         function_call: None,
         temperature: None,
@@ -61,6 +63,8 @@ fn _call_openai(user_content: &str, system_content: &str) -> String {
         frequency_penalty: None,
         logit_bias: None,
         user: None,
+        response_format: None,
+        seed: None,
     };
     let result = client.chat_completion(req);
     match result {
