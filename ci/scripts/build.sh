@@ -11,10 +11,11 @@ echo "Installing rust toolchain for $TARGET..."
 rustup target add $TARGET
 
 echo "Building..."
-RUSTFLAGS="--codegen target-feature=+crt-static $TARGET_RUSTFLAGS" \
-  cargo build --workspace --lib --target $TARGET --release
+cargo build --workspace --lib --target $TARGET --release
+
+echo "Creating release archive..."
 LIBRARY=libudf_core
-LIB_SOURCE=target/$TARGET/release/libudf_core
+LIB_SOURCE=target/$TARGET/release/$LIBRARY
 EXT=so
 
 if [[ $OS == macos-latest ]]; then
@@ -24,7 +25,6 @@ fi
 LIB_SOURCE=$LIB_SOURCE.$EXT
 ARCHIVE=$DIST/$LIBRARY_$VERSION_$TARGET.$EXT
 
-echo "Creating release archive..."
 mkdir dist
 cp $LIB_SOURCE $ARCHIVE
 echo "archive=$ARCHIVE" >> $GITHUB_OUTPUT
