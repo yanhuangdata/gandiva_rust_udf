@@ -11,7 +11,8 @@ echo "Installing rust toolchain for $TARGET..."
 rustup target add $TARGET
 
 echo "Building..."
-cargo build --workspace --lib --target $TARGET --release
+RUSTFLAGS=" $TARGET_RUSTFLAGS" \
+  cargo build --workspace --lib --target $TARGET --release
 
 echo "Creating release archive..."
 LIBRARY=libudf_core
