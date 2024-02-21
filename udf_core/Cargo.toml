@@ -9,8 +9,8 @@ crate-type = ["cdylib"]
 
 [dependencies]
 libc = "0.2.152"
-gandiva_rust_udf_macro = { version = "0.1.0" }
-gandiva_rust_udf_shared = { version = "0.1.0" }
+gandiva_rust_udf_macro = { version = "0.1.1" }
+gandiva_rust_udf_shared = { version = "0.1.1" }
 pi_func = { path = "../pi_func" }
 valid_json_func = { path = "../valid_json_func" }
 to_hex_func = { path = "../to_hex_func" }

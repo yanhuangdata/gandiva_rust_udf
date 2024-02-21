@@ -10,6 +10,6 @@ path = "src/lib.rs"
 
 [dependencies]
 libc = "0.2.152"
-gandiva_rust_udf_macro = { version = "0.1.0" }
-gandiva_rust_udf_shared = { version = "0.1.0" }
+gandiva_rust_udf_macro = { version = "0.1.1" }
+gandiva_rust_udf_shared = { version = "0.1.1" }
 strfmt = "0.2.4"
