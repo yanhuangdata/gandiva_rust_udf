@@ -1,7 +1,7 @@
 set shell := ["zsh", "-uc"]
 
 build build_type="":
-  cargo build --workspace --lib
+  cargo build --workspace --lib --release
 
 test:
     cargo test --workspace
