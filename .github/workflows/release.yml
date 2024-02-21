@@ -32,15 +32,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Setup tmate session
-      if: ${{ failure() }}
-      uses: mxschmitt/action-tmate@v3
-
     - name: Install AArch64 Toolchain
       if: ${{ matrix.target == 'aarch64-unknown-linux-gnu' }}
       run: |
         sudo apt-get update
         sudo apt-get install gcc-aarch64-linux-gnu
+
+    - name: Setup tmate session
+      if: ${{ matrix.target == 'aarch64-unknown-linux-gnu' }}
+      uses: mxschmitt/action-tmate@v3
 
     - name: Package
       id: package
