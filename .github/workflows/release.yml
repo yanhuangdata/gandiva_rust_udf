@@ -38,10 +38,6 @@ jobs:
         sudo apt-get update
         sudo apt-get install gcc-aarch64-linux-gnu
 
-    - name: Ref Type
-      id: ref-type
-      run: cargo run --package ref-type -- --reference ${{ github.ref }} >> $GITHUB_OUTPUT
-
     - name: Package
       id: package
       env:
