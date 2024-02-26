@@ -23,33 +23,17 @@ fn is_ipv6_loopback(addr: &str) -> bool {
 }
 
 #[udf]
-fn ipv4_string_to_num(addr: &str) -> u32 {
-    let ip = addr.parse::<Ipv4Addr>().unwrap();
-    let octets = ip.octets();
-    let mut num = 0;
-    for i in 0..4 {
-        num += (octets[i] as u32) << (8 * (3 - i));
-    }
-    num
-}
-
-#[udf]
-fn ipv4_num_to_string(addr: u32) -> String {
-    let mut octets = [0u8; 4];
-    for i in 0..4 {
-        octets[i] = ((addr >> (8 * (3 - i))) & 0xff) as u8;
-    }
-    Ipv4Addr::from(octets).to_string()
-}
-
-#[udf]
 fn ipv4_to_ipv6(ipv4: &str) -> String {
-    let ipv4_addr = ipv4.parse::<Ipv4Addr>().ok().unwrap();
-    let ipv6_components = ipv4_addr.octets();
-    let ipv6_addr = Ipv6Addr::new(0, 0, 0, 0, 0, 0xffff,
-                                  ((ipv6_components[0] as u16) << 8) + ipv6_components[1] as u16,
-                                  ((ipv6_components[2] as u16) << 8) + ipv6_components[3] as u16);
-    ipv6_addr.to_string()
+    match ipv4.parse::<Ipv4Addr>(){
+        Ok(ipv4_addr) =>{
+            let ipv6_components = ipv4_addr.octets();
+            let ipv6_addr = Ipv6Addr::new(0, 0, 0, 0, 0, 0xffff,
+                                          ((ipv6_components[0] as u16) << 8) + ipv6_components[1] as u16,
+                                          ((ipv6_components[2] as u16) << 8) + ipv6_components[3] as u16);
+            ipv6_addr.to_string()
+        },
+        Err(e)=> format!("{}: {}", e,ipv4),
+    }
 }
 
 #[cfg(test)]
@@ -60,41 +44,49 @@ mod tests {
     fn test_is_ipv4() {
         let result = is_ipv4("192.168.0.1");
         assert!(result);
+        assert!(!is_ipv4("2001:0da8:0207:0000:0000:0000:0000:8207"));
+        assert!(!is_ipv4("2hello"));
     }
 
     #[test]
     fn test_is_ipv6() {
         let result = is_ipv6("192.168.0.1");
         assert!(!result);
+        assert!(is_ipv6("2001:0da8:0207:0000:0000:0000:0000:8207"));
+        assert!(!is_ipv6("2hello"));
     }
 
     #[test]
     fn test_is_ipv4_loopback() {
         let result = is_ipv4_loopback("127.0.0.1");
         assert!(result);
+        assert!(!is_ipv4_loopback("hello world"));
     }
 
     #[test]
     fn test_is_ipv6_loopback() {
         let result = is_ipv6_loopback("127.0.0.1");
         assert!(!result);
-    }
-
-    #[test]
-    fn test_ipv4_string_to_num() {
-        let result = ipv4_string_to_num("255.255.255.255");
-        assert_eq!(result, 4294967295);
-    }
-
-    #[test]
-    fn test_ipv4_num_to_string() {
-        let result = ipv4_num_to_string(4294967295);
-        assert_eq!(result, "255.255.255.255");
+        assert!(is_ipv6_loopback("::1"));
+        assert!(!is_ipv6_loopback("2001:0da8:0207:0000:0000:0000:0000:8207"));
+        assert!(!is_ipv6_loopback("hello world"));
     }
 
     #[test]
     fn test_ipv4_to_ipv6() {
         let result = ipv4_to_ipv6("192.168.0.1");
         assert_eq!(result, "::ffff:192.168.0.1");
+    }
+
+    #[test]
+    fn test_ipv4_to_ipv6_input_is_ipv6(){
+        let result = ipv4_to_ipv6("2001:0da8:0207:0000:0000:0000:0000:8207");
+        assert_eq!(result,"invalid IPv4 address syntax: 2001:0da8:0207:0000:0000:0000:0000:8207");
+    }
+
+    #[test]
+    fn test_ipv4_to_ipv6_input_is_non_ip(){
+        let result = ipv4_to_ipv6("hello world");
+        assert_eq!(result,"invalid IPv4 address syntax: hello world");
     }
 }
