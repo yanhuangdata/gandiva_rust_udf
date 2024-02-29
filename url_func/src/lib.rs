@@ -36,19 +36,18 @@ fn top_level_domain(url: &str) -> String {
     }
 }
 
-
 #[udf]
 fn port(url: &str) -> i32 {
     let url = url::Url::parse(url);
     match url {
         Ok(u) => match u.port() {
             Some(p) => p as i32,
+            // TODO: may return null
             None => 0,
         },
         Err(_) => 0,
     }
 }
-
 
 // path without query string
 #[udf]
@@ -69,7 +68,6 @@ fn path_full(url: &str) -> String {
         Err(_) => String::from(""),
     }
 }
-
 
 #[udf]
 fn query_string(url: &str) -> String {
@@ -194,97 +192,179 @@ mod tests {
 
     #[test]
     fn test_protocol() {
-        let result = protocol("https://www.example.com");
+        let mut result = protocol("https://www.example.com");
         assert_eq!(result, "https");
+
+        result = protocol("//www.example.com");
+        assert_eq!(result, "");
     }
 
     #[test]
     fn test_domain() {
-        let result = domain("https://www.example.com");
+        let mut result = domain("https://www.example.com");
         assert_eq!(result, "www.example.com");
+
+        result = domain("www.example.com");
+        assert_eq!(result, "");
     }
 
     #[test]
     fn test_domain_without_www() {
-        let result = domain_without_www("https://www.example.com");
+        let mut result = domain_without_www("https://www.example.com");
+        assert_eq!(result, "example.com");
+
+        result = domain_without_www("https://example.com");
         assert_eq!(result, "example.com");
     }
 
     #[test]
     fn test_top_level_domain() {
-        let result = top_level_domain("https://www.example.com");
+        let mut result = top_level_domain("https://www.example.com");
         assert_eq!(result, "com");
+
+        result = top_level_domain("https://www.example.com/next");
+        assert_eq!(result, "com");
+
+        result = top_level_domain("https://example.com/next");
+        assert_eq!(result, "com");
+
+        result = top_level_domain("www.example.com/next");
+        assert_eq!(result, "");
     }
 
     #[test]
     fn test_port() {
-        let result = port("https://www.example.com:8080");
+        let mut result = port("https://www.example.com:8080");
         assert_eq!(result, 8080);
+
+        result = port("www.example.com:8080");
+        assert_eq!(result, 0);
+
+        result = port("https://www.example.com");
+        assert_eq!(result, 0);
     }
 
     #[test]
     fn test_path() {
-        let result = path("https://www.example.com:8080/foo/bar");
+        let mut result = path("https://www.example.com:8080/foo/bar");
         assert_eq!(result, "/foo/bar");
+
+        result = path("https://www.example.com/foo/bar");
+        assert_eq!(result, "/foo/bar");
+
+        // TODO: may return ""
+        result = path("www.example.com:8080/foo/bar");
+        assert_eq!(result, "8080/foo/bar");
     }
 
     #[test]
     fn test_path_full() {
-        let result = path_full("https://www.example.com:8080/foo/bar?baz=qux");
+        let mut result = path_full("https://www.example.com:8080/foo/bar?baz=qux");
         assert_eq!(result, "/foo/bar?baz=qux");
+
+        // TODO: may return ""
+        result = path_full("www.example.com:8080/foo/bar?baz=qux&q=a");
+        assert_eq!(result, "8080/foo/bar?baz=qux&q=a");
     }
 
     #[test]
     fn test_query_string() {
-        let result = query_string("https://www.example.com:8080/foo/bar?baz=qux");
+        let mut result = query_string("https://www.example.com:8080/foo/bar?baz=qux");
         assert_eq!(result, "baz=qux");
+
+        result = query_string("www.example.com/foo/bar?baz=qux&q=a");
+        assert_eq!(result, "");
     }
 
     #[test]
     fn test_fragment() {
-        let result = fragment("https://www.example.com:8080/foo/bar?baz=qux#quux");
+        let mut result = fragment("https://www.example.com:8080/foo/bar?baz=qux#quux");
         assert_eq!(result, "quux");
+
+        result = fragment("/www.example.com/foo/bar?baz=qux#quux");
+        assert_eq!(result, "");
     }
 
     #[test]
     fn test_netloc_username() {
-        let result = netloc_username("https://me:my_pass@www.example.com:8080/foo/bar?baz=qux#quux");
+        let mut result =
+            netloc_username("https://me:my_pass@www.example.com:8080/foo/bar?baz=qux#quux");
         assert_eq!(result, "me");
+
+        result = netloc_username("https://me:@www.example.com:8080/foo/bar?baz=qux#quux");
+        assert_eq!(result, "me");
+
+        result = netloc_username("//me:my_pass@www.example.com:8080/foo/bar?baz=qux#quux");
+        assert_eq!(result, "");
     }
 
     #[test]
     fn test_netloc_password() {
-        let result = netloc_password("https://me:my_pass@localhost:8080/foo/bar?baz=qux#quux");
+        let mut result = netloc_password("https://me:my_pass@localhost:8080/foo/bar?baz=qux#quux");
         assert_eq!(result, "my_pass");
+
+        result = netloc_password("https://me@localhost:8080/foo/bar?baz=qux#quux");
+        assert_eq!(result, "");
+
+        result = netloc_password("https://me:@localhost:8080/foo/bar?baz=qux#quux");
+        assert_eq!(result, "");
     }
 
     #[test]
     fn test_netloc() {
-        let result = netloc("https://me:my_pass@www.example.com:8080/foo/bar?baz=qux#quux");
+        let mut result = netloc("https://me:my_pass@www.example.com:8080/foo/bar?baz=qux#quux");
         assert_eq!(result, "me:my_pass@www.example.com:8080");
+
+        result = netloc("https://me@www.example.com/foo/bar?baz=qux#quux");
+        assert_eq!(result, "me@www.example.com");
+
+        result = netloc("https://me:@www.example.com:8080/foo/bar?baz=qux#quux");
+        assert_eq!(result, "me@www.example.com:8080");
     }
 
     #[test]
     fn test_is_valid_url() {
-        let result = is_valid_url("https://www.example.com:8080/foo/bar?baz=qux#quux");
+        let mut result = is_valid_url("https://www.example.com:8080/foo/bar?baz=qux#quux");
         assert_eq!(result, true);
+
+        result = is_valid_url("/www.example.com:8080/foo/bar?baz=qux#quux");
+        assert_eq!(result, false);
     }
 
     #[test]
     fn test_cut_www() {
-        let result = cut_www("https://www.example.com:8080/foo/bar?baz=qux#quux");
+        let mut result = cut_www("https://www.example.com:8080/foo/bar?baz=qux#quux");
         assert_eq!(result, "https://example.com:8080/foo/bar?baz=qux#quux");
+
+        result = cut_www("https://example.com:8080/foo/bar?baz=qux#quux");
+        assert_eq!(result, "https://example.com:8080/foo/bar?baz=qux#quux");
+
+        result = cut_www("https://www.www.com:8080/foo/bar?baz=qux#quux");
+        assert_eq!(result, "https://com:8080/foo/bar?baz=qux#quux");
     }
 
     #[test]
     fn test_cut_query_string() {
-        let result = cut_query_string("https://www.example.com:8080/foo/bar?baz=qux");
+        let mut result = cut_query_string("https://www.example.com:8080/foo/bar?baz=qux");
         assert_eq!(result, "https://www.example.com:8080/foo/bar");
+
+        result = cut_query_string("https://www.example.com:8080?baz=qux");
+        assert_eq!(result, "https://www.example.com:8080/");
+
+        result = cut_query_string("https://www.example.com?baz=qux");
+        assert_eq!(result, "https://www.example.com/");
     }
 
     #[test]
     fn test_cut_query_string_and_fragment() {
-        let result = cut_query_string_and_fragment("https://www.example.com:8080/foo/bar?baz=qux#quux");
+        let mut result =
+            cut_query_string_and_fragment("https://www.example.com:8080/foo/bar?baz=qux#quux");
         assert_eq!(result, "https://www.example.com:8080/foo/bar");
+
+        result = cut_query_string_and_fragment("https://www.example.com:8080#quux");
+        assert_eq!(result, "https://www.example.com:8080/");
+
+        result = cut_query_string_and_fragment("https://www.example.com#quux");
+        assert_eq!(result, "https://www.example.com/");
     }
 }
