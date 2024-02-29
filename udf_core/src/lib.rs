@@ -34,6 +34,14 @@ pub fn register_all_funcs() {
     url_func::register_cut_www_utf8();
     url_func::register_cut_query_string_utf8();
     url_func::register_cut_query_string_and_fragment_utf8();
+    strsim_func::register_jaro_similarity_utf8_utf8();
+    strsim_func::register_jaro_winkler_similarity_utf8_utf8();
+    strsim_func::register_damerau_levenshtein_distance_utf8_utf8();
+    strsim_func::register_hamming_distance_utf8_utf8();
+    strsim_func::register_normalized_damerau_levenshtein_distance_utf8_utf8();
+    strsim_func::register_normalized_levenshtein_distance_utf8_utf8();
+    strsim_func::register_osa_distance_utf8_utf8();
+    strsim_func::register_sorensen_dice_similarity_utf8_utf8();
 }
 
 #[cfg(test)]
@@ -54,7 +62,7 @@ mod tests {
             let registry = std::ffi::CString::from_raw(registry_c_str);
             let registry_str = registry.to_str().unwrap();
             let udf_registry: gandiva_rust_udf_shared::UdfRegistry = serde_json::from_str(registry_str).unwrap();
-            assert_eq!(udf_registry.functions.len(), 30);
+            assert_eq!(udf_registry.functions.len(), 38);
         }
     }
 }
