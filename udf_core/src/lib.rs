@@ -1,4 +1,3 @@
-pub use pi_func::pi;
 use gandiva_rust_udf_macro::udf_registry;
 
 // FIXME: use build.rs to automate the registration of all functions
@@ -42,17 +41,12 @@ pub fn register_all_funcs() {
     strsim_func::register_normalized_levenshtein_distance_utf8_utf8();
     strsim_func::register_osa_distance_utf8_utf8();
     strsim_func::register_sorensen_dice_similarity_utf8_utf8();
+    bar_func::register_bar_int64_int64_int64_int64();
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn test_pi() {
-        let value = pi_func::pi();
-        assert!(value > 3.14);
-    }
 
     #[test]
     fn test_register_func() {
@@ -61,7 +55,8 @@ mod tests {
         unsafe {
             let registry = std::ffi::CString::from_raw(registry_c_str);
             let registry_str = registry.to_str().unwrap();
-            let udf_registry: gandiva_rust_udf_shared::UdfRegistry = serde_json::from_str(registry_str).unwrap();
+            let udf_registry: gandiva_rust_udf_shared::UdfRegistry =
+                serde_json::from_str(registry_str).unwrap();
             assert_eq!(udf_registry.functions.len(), 38);
         }
     }

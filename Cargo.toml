@@ -27,5 +27,6 @@ members = [
     "uuid_func",
     "url_func",
     "openai_func",
+    "bar_func",
 ]
 resolver = "2"
