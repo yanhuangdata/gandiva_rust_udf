@@ -57,7 +57,7 @@ mod tests {
             let registry_str = registry.to_str().unwrap();
             let udf_registry: gandiva_rust_udf_shared::UdfRegistry =
                 serde_json::from_str(registry_str).unwrap();
-            assert_eq!(udf_registry.functions.len(), 38);
+            assert_eq!(udf_registry.functions.len(), 39);
         }
     }
 }

@@ -14,25 +14,34 @@ fn is_ipv6(addr: &str) -> bool {
 
 #[udf]
 fn is_ipv4_loopback(addr: &str) -> bool {
-    addr.parse::<Ipv4Addr>().map_or(false, |ip| ip.is_loopback())
+    addr.parse::<Ipv4Addr>()
+        .map_or(false, |ip| ip.is_loopback())
 }
 
 #[udf]
 fn is_ipv6_loopback(addr: &str) -> bool {
-    addr.parse::<Ipv6Addr>().map_or(false, |ip| ip.is_loopback())
+    addr.parse::<Ipv6Addr>()
+        .map_or(false, |ip| ip.is_loopback())
 }
 
 #[udf]
 fn ipv4_to_ipv6(ipv4: &str) -> String {
-    match ipv4.parse::<Ipv4Addr>(){
-        Ok(ipv4_addr) =>{
+    match ipv4.parse::<Ipv4Addr>() {
+        Ok(ipv4_addr) => {
             let ipv6_components = ipv4_addr.octets();
-            let ipv6_addr = Ipv6Addr::new(0, 0, 0, 0, 0, 0xffff,
-                                          ((ipv6_components[0] as u16) << 8) + ipv6_components[1] as u16,
-                                          ((ipv6_components[2] as u16) << 8) + ipv6_components[3] as u16);
+            let ipv6_addr = Ipv6Addr::new(
+                0,
+                0,
+                0,
+                0,
+                0,
+                0xffff,
+                ((ipv6_components[0] as u16) << 8) + ipv6_components[1] as u16,
+                ((ipv6_components[2] as u16) << 8) + ipv6_components[3] as u16,
+            );
             ipv6_addr.to_string()
-        },
-        Err(e)=> format!("{}: {}", e,ipv4),
+        }
+        Err(e) => format!("{}: {}", e, ipv4),
     }
 }
 
@@ -79,14 +88,17 @@ mod tests {
     }
 
     #[test]
-    fn test_ipv4_to_ipv6_input_is_ipv6(){
+    fn test_ipv4_to_ipv6_input_is_ipv6() {
         let result = ipv4_to_ipv6("2001:0da8:0207:0000:0000:0000:0000:8207");
-        assert_eq!(result,"invalid IPv4 address syntax: 2001:0da8:0207:0000:0000:0000:0000:8207");
+        assert_eq!(
+            result,
+            "invalid IPv4 address syntax: 2001:0da8:0207:0000:0000:0000:0000:8207"
+        );
     }
 
     #[test]
-    fn test_ipv4_to_ipv6_input_is_non_ip(){
+    fn test_ipv4_to_ipv6_input_is_non_ip() {
         let result = ipv4_to_ipv6("hello world");
-        assert_eq!(result,"invalid IPv4 address syntax: hello world");
+        assert_eq!(result, "invalid IPv4 address syntax: hello world");
     }
 }
