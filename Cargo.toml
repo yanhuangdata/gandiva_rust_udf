@@ -28,5 +28,6 @@ members = [
     "url_func",
     "openai_func",
     "bar_func",
+    "py_func",
 ]
 resolver = "2"
