@@ -1,5 +1,5 @@
-use serde_json::Value;
 use gandiva_rust_udf_macro::udf;
+use serde_json::Value;
 
 #[udf]
 fn valid_json(json_str: &str) -> bool {
