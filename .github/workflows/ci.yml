@@ -17,8 +17,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install cargo script
-        run: cargo install cargo-script
+      - name: Install gandiva_rust_udf_build
+        run: cargo install gandiva_rust_udf_build
 
       - name: Run tests
-        run: cargo script generate_udf_registry.rs && cargo test --workspace --verbose
+        run: gen-udf-reg && cargo test --workspace --verbose
