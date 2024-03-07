@@ -2,31 +2,31 @@ use gandiva_rust_udf_macro::udf;
 use std::collections::HashMap;
 use strfmt::strfmt;
 
-#[udf]
+#[udf(name = "format")]
 pub fn format_1(template: &str, value1: &str) -> String {
     let values = &[value1];
     return format(template, values);
 }
 
-#[udf]
+#[udf(name = "format")]
 pub fn format_2(template: &str, value1: &str, value2: &str) -> String {
     let values = &[value1, value2];
     return format(template, values);
 }
 
-#[udf]
+#[udf(name = "format")]
 pub fn format_3(template: &str, value1: &str, value2: &str, value3: &str) -> String {
     let values = &[value1, value2, value3];
     return format(template, values);
 }
 
-#[udf]
+#[udf(name = "format")]
 pub fn format_4(template: &str, value1: &str, value2: &str, value3: &str, value4: &str) -> String {
     let values = &[value1, value2, value3, value4];
     return format(template, values);
 }
 
-#[udf]
+#[udf(name = "format")]
 pub fn format_5(
     template: &str,
     value1: &str,

@@ -10,8 +10,8 @@ echo "Packaging $VERSION for $TARGET..."
 echo "Installing rust toolchain for $TARGET..."
 rustup target add $TARGET
 
-echo "Pre build script..."
-cargo script generate_udf_registry.rs
+echo "Generate udf registry ..."
+gen-udf-reg
 
 echo "Building..."
 RUSTFLAGS=" $TARGET_RUSTFLAGS" \
