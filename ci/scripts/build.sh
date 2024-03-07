@@ -11,7 +11,7 @@ echo "Installing rust toolchain for $TARGET..."
 rustup target add $TARGET
 
 echo "Pre build script..."
-cargo script generate_udf_registry.rs --clear-cache
+cargo script generate_udf_registry.rs
 
 echo "Building..."
 RUSTFLAGS=" $TARGET_RUSTFLAGS" \

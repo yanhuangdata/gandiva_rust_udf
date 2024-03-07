@@ -21,4 +21,4 @@ jobs:
         run: cargo install cargo-script
 
       - name: Run tests
-        run: cargo script generate_udf_registry.rs --clear-cache && cargo test --workspace --verbose
+        run: cargo script generate_udf_registry.rs && cargo test --workspace --verbose
