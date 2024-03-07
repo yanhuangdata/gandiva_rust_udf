@@ -16,5 +16,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install cargo script
+        run: cargo install cargo-script
+
       - name: Run tests
         run: cargo script generate_udf_registry.rs --clear-cache && cargo test --workspace --verbose
