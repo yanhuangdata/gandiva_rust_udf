@@ -10,12 +10,15 @@ echo "Packaging $VERSION for $TARGET..."
 echo "Installing rust toolchain for $TARGET..."
 rustup target add $TARGET
 
+echo "Pre build script..."
+cargo script prebuild.rs --clear-cache
+
 echo "Building..."
 RUSTFLAGS=" $TARGET_RUSTFLAGS" \
   cargo build --workspace --lib --target $TARGET --release
 
 echo "Creating release archive..."
-LIBRARY=libudf_core
+LIBRARY=libgandiva_rust_udf
 LIB_SOURCE=target/$TARGET/release/$LIBRARY
 EXT=so
 

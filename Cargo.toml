@@ -1,6 +1,6 @@
 [package]
 name = "gandiva_rust_udf"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2021"
 authors = ["yanhuangdata"]
 description = "A library for gandiva rust udfs"
@@ -14,20 +14,14 @@ license-file = "LICENSE"
 
 [workspace]
 members = [
-    "udf_core",
-    "pi_func",
+    "udf_registry",
     "valid_json_func",
-    "to_hex_func",
-    "num_func",
-    "rad_func",
     "is_ascii_func",
     "format_func",
     "conv_func",
     "ip_func",
     "uuid_func",
     "url_func",
-    "openai_func",
     "bar_func",
-    "py_func",
 ]
 resolver = "2"
