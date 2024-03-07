@@ -17,8 +17,12 @@ pub fn jaro_winkler_similarity(a: &str, b: &str) -> f64 {
 }
 
 #[udf]
-pub fn damerau_levenshtein_distance(a: &str, b: &str) -> usize {
-    return damerau_levenshtein(a, b);
+pub fn damerau_levenshtein_distance(a: &str, b: &str) -> i64 {
+    if let Ok(i64_value) = damerau_levenshtein(a, b).try_into() {
+        i64_value
+    } else {
+        0
+    }
 }
 
 #[udf]
@@ -41,8 +45,12 @@ pub fn normalized_levenshtein_distance(a: &str, b: &str) -> f64 {
 }
 
 #[udf]
-pub fn osa_distance(a: &str, b: &str) -> usize {
-    return strsim::osa_distance(a, b);
+pub fn osa_distance(a: &str, b: &str) -> i64 {
+    if let Ok(i64_value) = strsim::osa_distance(a, b).try_into() {
+        i64_value
+    } else {
+        0
+    }
 }
 
 #[udf]

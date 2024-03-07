@@ -15,7 +15,7 @@ This project is a collection of UDFs written in Rust for Apache Arrow Gandiva.
 6. Register `my_func` in `udf_core/src/lib.rs`
 7. Compile `udf_core` as shared library
     1. `cargo build --release --lib --workspace`
-8. Deploy `libudf_core` shared library to where your Gandiva application can load it
+8. Deploy `libgandiva_rust_udf` shared library to where your Gandiva application can load it
 
 # How to create a different project like this
 1. udf_core

@@ -15,6 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Run tests
-      run: cargo test --workspace --verbose
+      - uses: actions/checkout@v4
+
+      - name: Install cargo script
+        run: cargo install cargo-script
+
+      - name: Run tests
+        run: cargo script generate_udf_registry.rs && cargo test --workspace --verbose
