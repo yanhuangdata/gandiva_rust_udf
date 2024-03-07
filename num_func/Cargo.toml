@@ -1,0 +1,10 @@
+[package]
+name = "num_func"
+version = "0.1.1"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[dependencies]
+num-integer = "0.1.45"
+gandiva_rust_udf_macro = { version = "0.1.2" }
+gandiva_rust_udf_shared = { version = "0.1.2" }

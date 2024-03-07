@@ -16,6 +16,7 @@ license-file = "LICENSE"
 members = [
     "udf_registry",
     "valid_json_func",
+    "num_func",
     "is_ascii_func",
     "format_func",
     "conv_func",
