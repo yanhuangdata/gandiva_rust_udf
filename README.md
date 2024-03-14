@@ -23,7 +23,7 @@ members = [
 # in gandiva_rust_udf/my_func/Cargo.toml
 ...
 [dependencies]
-gandiva_rust_udf_macro = { version = "0.1.2" }
+gandiva_rust_udf_macro = { version = "0.1.3" }
 gandiva_rust_udf_shared = { version = "0.1.2" }
 ...
 ```
