@@ -9,6 +9,6 @@ name = "bar_func"
 path = "src/lib.rs"
 
 [dependencies]
-libc = "0.2.152"
-gandiva_rust_udf_macro = { version = "0.1.1" }
-gandiva_rust_udf_shared = { version = "0.1.1" }
+libc = { workspace = true }
+gandiva_rust_udf_macro = { workspace = true }
+gandiva_rust_udf_shared = { workspace = true }

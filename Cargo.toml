@@ -1,6 +1,6 @@
 [package]
 name = "gandiva_rust_udf"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 authors = ["yanhuangdata"]
 description = "A library for gandiva rust udfs"
@@ -26,3 +26,8 @@ members = [
     "bar_func",
 ]
 resolver = "2"
+
+[workspace.dependencies]
+libc = "0.2.152"
+gandiva_rust_udf_macro = { version = "0.1.4" }
+gandiva_rust_udf_shared = { version = "0.1.4" }
