@@ -17,16 +17,31 @@ crate-type = ["cdylib"]
 members = [
     "my_func",
 ]
+
+[dependencies]
+libc = "0.2.152"
+gandiva_rust_udf_macro = { version = "0.1.3" }
+gandiva_rust_udf_shared = { version = "0.1.2" }
 ```
 - go to gandiva_rust_udf/my_func/Cargo.toml and add gandiva_rust_udf_macro and gandiva_rust_udf_shared in dependencies
 ```toml
 # in gandiva_rust_udf/my_func/Cargo.toml
-...
+[package]
+name = "my_func"
+version = "0.0.1"
+edition = "2021"
+
+[lib]
+name = "my_func"
+path = "src/lib.rs"
+
 [dependencies]
-gandiva_rust_udf_macro = { version = "0.1.3" }
-gandiva_rust_udf_shared = { version = "0.1.2" }
-...
+# if your function requires string as parameters or return value, you should add libc as a dependency
+libc = { workspace = true }
+gandiva_rust_udf_macro = { workspace = true }
+gandiva_rust_udf_shared = { workspace = true }
 ```
+
 - code the function in gandiva_rust_udf/my_func/src/lib.rs for example
 ```rust
 use gandiva_rust_udf_macro::udf;
