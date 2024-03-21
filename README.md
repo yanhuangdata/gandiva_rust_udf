@@ -15,13 +15,15 @@ crate-type = ["cdylib"]
 
 [workspace]
 members = [
+    "udf_registry",
     "my_func",
 ]
+resolver = "2"
 
 [dependencies]
 libc = "0.2.152"
-gandiva_rust_udf_macro = { version = "0.1.3" }
-gandiva_rust_udf_shared = { version = "0.1.2" }
+gandiva_rust_udf_macro = { version = "0.1.4" }
+gandiva_rust_udf_shared = { version = "0.1.4" }
 ```
 - go to gandiva_rust_udf/my_func/Cargo.toml and add gandiva_rust_udf_macro and gandiva_rust_udf_shared in dependencies
 ```toml
