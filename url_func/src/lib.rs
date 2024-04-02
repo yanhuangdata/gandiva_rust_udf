@@ -13,7 +13,10 @@ fn protocol(url: &str) -> String {
 fn domain(url: &str) -> String {
     let url = url::Url::parse(url);
     match url {
-        Ok(u) => u.domain().unwrap().to_string(),
+        Ok(u) => match u.domain() {
+            Some(domain) => domain.to_string(),
+            None => String::from(""),
+        },
         Err(_) => String::from(""),
     }
 }
@@ -31,7 +34,15 @@ fn domain_without_www(url: &str) -> String {
 fn top_level_domain(url: &str) -> String {
     let url = url::Url::parse(url);
     match url {
-        Ok(u) => u.domain().unwrap().split('.').last().unwrap().to_string(),
+        Ok(u) => match u.domain() {
+            Some(domain) => {
+                match domain.split('.').last() {
+                    Some(tld) => tld.to_string(),
+                    None => String::from(""),
+                }
+            },
+            None => String::from(""),
+        },
         Err(_) => String::from(""),
     }
 }
@@ -206,6 +217,12 @@ mod tests {
 
         result = domain("www.example.com");
         assert_eq!(result, "");
+
+        result = domain("https://127.0.0.1/zh-CN/auth/login");
+        assert_eq!(result,"");
+
+        result = domain("");
+        assert_eq!(result,"");
     }
 
     #[test]
@@ -215,6 +232,9 @@ mod tests {
 
         result = domain_without_www("https://example.com");
         assert_eq!(result, "example.com");
+
+        result = domain("https://127.0.0.1/zh-CN/auth/login");
+        assert_eq!(result,"");
     }
 
     #[test]
@@ -230,6 +250,9 @@ mod tests {
 
         result = top_level_domain("www.example.com/next");
         assert_eq!(result, "");
+
+        result = top_level_domain("https://127.0.0.1/zh-CN/auth/login");
+        assert_eq!(result,"")
     }
 
     #[test]
