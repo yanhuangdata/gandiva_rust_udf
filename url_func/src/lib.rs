@@ -51,10 +51,8 @@ fn top_level_domain(url: &str) -> String {
 fn port(url: &str) -> i32 {
     let url = url::Url::parse(url);
     match url {
-        Ok(u) => match u.port() {
-            Some(p) => p as i32,
-            // TODO: may return null
-            None => 0,
+        Ok(u) =>{
+            u.port_or_known_default().map_or(0, |port| port as i32)
         },
         Err(_) => 0,
     }
@@ -264,7 +262,10 @@ mod tests {
         assert_eq!(result, 0);
 
         result = port("https://www.example.com");
-        assert_eq!(result, 0);
+        assert_eq!(result, 443);
+
+        result = port("http://www.example.com");
+        assert_eq!(result, 80);
     }
 
     #[test]
