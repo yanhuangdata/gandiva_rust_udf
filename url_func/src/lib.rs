@@ -35,11 +35,9 @@ fn top_level_domain(url: &str) -> String {
     let url = url::Url::parse(url);
     match url {
         Ok(u) => match u.domain() {
-            Some(domain) => {
-                match domain.split('.').last() {
-                    Some(tld) => tld.to_string(),
-                    None => String::from(""),
-                }
+            Some(domain) => match domain.split('.').last() {
+                Some(tld) => tld.to_string(),
+                None => String::from(""),
             },
             None => String::from(""),
         },
@@ -51,9 +49,7 @@ fn top_level_domain(url: &str) -> String {
 fn port(url: &str) -> i32 {
     let url = url::Url::parse(url);
     match url {
-        Ok(u) =>{
-            u.port_or_known_default().map_or(0, |port| port as i32)
-        },
+        Ok(u) => u.port_or_known_default().map_or(0, |port| port as i32),
         Err(_) => 0,
     }
 }
@@ -217,10 +213,10 @@ mod tests {
         assert_eq!(result, "");
 
         result = domain("https://127.0.0.1/zh-CN/auth/login");
-        assert_eq!(result,"");
+        assert_eq!(result, "");
 
         result = domain("");
-        assert_eq!(result,"");
+        assert_eq!(result, "");
     }
 
     #[test]
@@ -232,7 +228,7 @@ mod tests {
         assert_eq!(result, "example.com");
 
         result = domain("https://127.0.0.1/zh-CN/auth/login");
-        assert_eq!(result,"");
+        assert_eq!(result, "");
     }
 
     #[test]
@@ -250,7 +246,7 @@ mod tests {
         assert_eq!(result, "");
 
         result = top_level_domain("https://127.0.0.1/zh-CN/auth/login");
-        assert_eq!(result,"")
+        assert_eq!(result, "")
     }
 
     #[test]
@@ -266,6 +262,10 @@ mod tests {
 
         result = port("http://www.example.com");
         assert_eq!(result, 80);
+
+        // out of range
+        result = port("https://127.0.0.1:80443/zh-CN/auth/login");
+        assert_eq!(result, 0);
     }
 
     #[test]
