@@ -25,7 +25,7 @@ fn is_ipv6_loopback(addr: &str) -> bool {
 }
 
 #[udf]
-fn ipv4_to_ipv6(ipv4: &str) -> String {
+fn ipv4_to_ipv6(ipv4: &str) -> Result<String, String> {
     match ipv4.parse::<Ipv4Addr>() {
         Ok(ipv4_addr) => {
             let ipv6_components = ipv4_addr.octets();
@@ -39,9 +39,9 @@ fn ipv4_to_ipv6(ipv4: &str) -> String {
                 ((ipv6_components[0] as u16) << 8) + ipv6_components[1] as u16,
                 ((ipv6_components[2] as u16) << 8) + ipv6_components[3] as u16,
             );
-            ipv6_addr.to_string()
+            Ok(ipv6_addr.to_string())
         }
-        Err(e) => format!("{}: {}", e, ipv4),
+        Err(e) => Err(format!("{}: {}", e, ipv4)),
     }
 }
 
@@ -84,14 +84,18 @@ mod tests {
     #[test]
     fn test_ipv4_to_ipv6() {
         let result = ipv4_to_ipv6("192.168.0.1");
-        assert_eq!(result, "::ffff:192.168.0.1");
+        assert!(result.is_ok());
+        let value = result.unwrap();
+        assert_eq!(value, "::ffff:192.168.0.1");
     }
 
     #[test]
     fn test_ipv4_to_ipv6_input_is_ipv6() {
         let result = ipv4_to_ipv6("2001:0da8:0207:0000:0000:0000:0000:8207");
+        assert!(result.is_err());
+        let value = result.err().unwrap();
         assert_eq!(
-            result,
+            value,
             "invalid IPv4 address syntax: 2001:0da8:0207:0000:0000:0000:0000:8207"
         );
     }
@@ -99,6 +103,10 @@ mod tests {
     #[test]
     fn test_ipv4_to_ipv6_input_is_non_ip() {
         let result = ipv4_to_ipv6("hello world");
-        assert_eq!(result, "invalid IPv4 address syntax: hello world");
+        assert!(result.is_err());
+        assert_eq!(
+            result.err().unwrap(),
+            "invalid IPv4 address syntax: hello world"
+        );
     }
 }
