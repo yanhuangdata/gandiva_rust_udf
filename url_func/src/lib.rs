@@ -23,11 +23,8 @@ fn domain(url: &str) -> String {
 
 #[udf]
 fn domain_without_www(url: &str) -> String {
-    let url = url::Url::parse(url);
-    match url {
-        Ok(u) => u.domain().unwrap().trim_start_matches("www.").to_string(),
-        Err(_) => String::from(""),
-    }
+    let domain_value = domain(url);
+    domain_value.trim_start_matches("www.").to_string()
 }
 
 #[udf]
@@ -227,7 +224,7 @@ mod tests {
         result = domain_without_www("https://example.com");
         assert_eq!(result, "example.com");
 
-        result = domain("https://127.0.0.1/zh-CN/auth/login");
+        result = domain_without_www("https://127.0.0.1/zh-CN/auth/login");
         assert_eq!(result, "");
     }
 
