@@ -1,6 +1,6 @@
 [package]
 name = "gandiva_rust_udf"
-version = "0.3.3"
+version = "0.3.4"
 edition = "2021"
 authors = ["yanhuangdata"]
 description = "A library for gandiva rust udfs"
