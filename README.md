@@ -133,3 +133,9 @@ cargo new gandiva_rust_udf_cus --lib
 |utf8 cut_query_string_and_fragment(utf8)|
 |utf8 uuid()|
 |bool valid_json(utf8)|
+|utf8 netmask(utf8)|
+|utf8 base_ip(utf8)|
+|utf8 broadcast_ip(utf8)|
+|utf8 host_count(utf8)|
+|utf8 first_usable_ip(utf8)|
+|utf8 last_usable_ip(utf8)|
