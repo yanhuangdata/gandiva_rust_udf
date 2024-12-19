@@ -1,0 +1,10 @@
+[package]
+name = "cidr_func"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ipnetwork = "0.20.0"
+libc = { workspace = true }
+gandiva_rust_udf_macro = { workspace = true }
+gandiva_rust_udf_shared = { workspace = true }
