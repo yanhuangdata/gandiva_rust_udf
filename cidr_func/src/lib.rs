@@ -14,11 +14,7 @@ pub fn netmask(ip: &str) -> Result<String, String> {
 #[udf]
 pub fn base_ip(ip: &str) -> Result<String, String> {
     match ip.parse::<IpNetwork>() {
-<<<<<<< Updated upstream
-        Ok(network) => Ok(network.ip().to_string()),
-=======
         Ok(network) => Ok(network.network().to_string()),
->>>>>>> Stashed changes
         Err(_) => Ok("Invalid cidr specification".to_string())
     }
 }
@@ -156,8 +152,6 @@ mod tests {
     }
 
     #[test]
-<<<<<<< Updated upstream
-=======
     fn base_ip_ipv4_works1() {
         let result = base_ip("192.168.1.100/24");
         assert!(result.is_ok());
@@ -166,7 +160,6 @@ mod tests {
     }
 
     #[test]
->>>>>>> Stashed changes
     fn base_ip_ipv6_works() {
         let result = base_ip("2001:db8::/32");
         assert!(result.is_ok());
@@ -334,13 +327,14 @@ mod tests {
     }
 
     #[test]
-<<<<<<< Updated upstream
     fn base_ip_ipv4_1_works() {
         let result = base_ip("10.88.135.144/0");
         assert!(result.is_ok());
         let value = result.unwrap();
-        assert_eq!(value, "10.88.135.144");
-=======
+        assert_eq!(value, "0.0.0.0");
+    }
+    
+    #[test]
     fn base_ip_ipv4_test_cases() {
         let result = base_ip("192.168.1.100/24");
         assert!(result.is_ok());
@@ -356,7 +350,6 @@ mod tests {
         assert!(result.is_ok());
         let value = result.unwrap();
         assert_eq!(value, "172.16.0.0");
->>>>>>> Stashed changes
     }
 
     #[test]
@@ -405,11 +398,7 @@ mod tests {
         let result = base_ip("2001:db8::/0");
         assert!(result.is_ok());
         let value = result.unwrap();
-<<<<<<< Updated upstream
-        assert_eq!(value, "2001:db8::");
-=======
         assert_eq!(value, "::");
->>>>>>> Stashed changes
     }
 
     #[test]
