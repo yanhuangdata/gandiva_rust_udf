@@ -22,7 +22,11 @@ pub fn base_ip(ip: &str) -> Result<String, String> {
 #[udf]
 pub fn broadcast_ip(ip: &str) -> Result<String, String> {
     match ip.parse::<IpNetwork>() {
-        Ok(network) => Ok(network.broadcast().to_string()),
+        Ok(network) => {
+            if network.prefix() == 32 {
+                return Ok("".to_string());
+            }
+            Ok(network.broadcast().to_string())},
         Err(_) => Ok("Invalid cidr specification".to_string())
     }
 }
@@ -184,6 +188,14 @@ mod tests {
     }
 
     #[test]
+    fn broadcast_ip_ipv4_None() {
+        let result = broadcast_ip("10.88.135.144/32");
+        assert!(result.is_ok());
+        let value = result.unwrap();
+        assert_eq!(value, "");
+    }
+
+    #[test]
     fn broadcast_ip_ipv6_works() {
         let result = broadcast_ip("2001:db8::/32");
         assert!(result.is_ok());
@@ -333,7 +345,7 @@ mod tests {
         let value = result.unwrap();
         assert_eq!(value, "0.0.0.0");
     }
-    
+
     #[test]
     fn base_ip_ipv4_test_cases() {
         let result = base_ip("192.168.1.100/24");
