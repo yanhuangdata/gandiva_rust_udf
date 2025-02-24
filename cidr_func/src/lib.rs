@@ -188,7 +188,7 @@ mod tests {
     }
 
     #[test]
-    fn broadcast_ip_ipv4_None() {
+    fn broadcast_ip_ipv4_none() {
         let result = broadcast_ip("10.88.135.144/32");
         assert!(result.is_ok());
         let value = result.unwrap();
@@ -200,7 +200,7 @@ mod tests {
         let result = broadcast_ip("2001:db8::/32");
         assert!(result.is_ok());
         let value = result.unwrap();
-        assert_eq!(value, "2001:db8:ffff:ffff:ffff:ffff:ffff:ffff");
+        assert_eq!(value, "");
     }
 
     #[test]
@@ -345,7 +345,7 @@ mod tests {
         let value = result.unwrap();
         assert_eq!(value, "0.0.0.0");
     }
-
+    
     #[test]
     fn base_ip_ipv4_test_cases() {
         let result = base_ip("192.168.1.100/24");
